@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flexnews/src/core/utils/http.dart';
 import 'package:flexnews/src/core/utils/loading.dart';
-import 'package:flexnews/src/models/corestock_model/markets_model.dart';
+import 'package:flexnews/src/models/everything_model/markets_model.dart';
 import 'package:get/get.dart';
 
 class MarketstatusController extends GetxController {

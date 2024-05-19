@@ -1,7 +1,11 @@
+import 'package:flexnews/src/bindings/binding.dart';
 import 'package:flexnews/src/pages/homescreen/homescreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() {
+  init();
   runApp(const MyApp());
 }
 
@@ -11,9 +15,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-     
-      home:HomeScreen()
+    return GetMaterialApp(
+     builder: EasyLoading.init(),
+      home:const HomeScreen()
     );
   }
 }

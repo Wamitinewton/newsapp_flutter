@@ -45,30 +45,26 @@ class HttpUtil {
         return handler.next(response); // continue
       },
       onError: (DioException error, handler) {
-        
-
         return handler.next(error);
       },
     ));
   }
 
   // error handling
-  void onError(ErrorEntity eInfo){
+  void onError(ErrorEntity eInfo) {
     print('error.code -> ${eInfo.code}, error.message -> ${eInfo.message}');
 
     switch (eInfo.code) {
       case 401:
+        EasyLoading.showError(eInfo.message);
 
-      EasyLoading.showError(eInfo.message);
-    
         break;
       default:
-      EasyLoading.showError('unknown error');
-      break;
+        EasyLoading.showError('unknown error');
+        break;
     }
   }
 
-  
   ErrorEntity createErrorEntity(DioException error) {
     switch (error.type) {
       case DioExceptionType.cancel:
@@ -137,7 +133,6 @@ class HttpUtil {
     }
   }
 
-  
 /*
     * Cancel request
     *
@@ -170,8 +165,6 @@ class HttpUtil {
   /// cacheDisk whether disk cache
   ///
 
- 
-  
   Future get(
     String path, {
     Map<String, dynamic>? queryParameters,
@@ -364,5 +357,4 @@ class ErrorEntity implements Exception {
     if (message == "") return "Exception";
     return "Exception: code $code, $message";
   }
-
 }
