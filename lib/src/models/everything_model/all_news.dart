@@ -3,11 +3,8 @@ class AllNewsResponse {
   int? totalResults;
   List<AllArticals>? allArticals;
 
-  AllNewsResponse({
-    this.allArticals,
-    this.totalResults,
-    this.status,
-  });
+  AllNewsResponse({this.allArticals, this.totalResults, this.status});
+
   AllNewsResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     totalResults = json['totalResults'];
@@ -31,7 +28,7 @@ class AllNewsResponse {
 }
 
 class AllArticals {
-  List<AllSource>? allSource;
+  AllSource? allSource;
   String? author;
   String? title;
   String? description;
@@ -59,12 +56,7 @@ class AllArticals {
     imageUrl = json['urlToImage'];
     publishedAt = json['publishedAt'];
     content = json['content'];
-    if (json['source'] != null) {
-      allSource = <AllSource>[];
-      json['source'].forEach((v) {
-        allSource!.add(AllSource.fromJson(v));
-      });
-    }
+    allSource = json['source'] != null ? AllSource.fromJson(json['source']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -77,7 +69,7 @@ class AllArticals {
     data['publishedAt'] = publishedAt;
     data['content'] = content;
     if (allSource != null) {
-      data['source'] = allSource!.map((v) => v.toJson()).toList();
+      data['source'] = allSource!.toJson();
     }
     return data;
   }
@@ -93,11 +85,11 @@ class AllSource {
     id = json['id'];
     name = json['name'];
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
-
     return data;
   }
 }

@@ -1,24 +1,14 @@
 import 'dart:convert';
+import 'package:flexnews/src/models/everything_model/all_news.dart';
+import 'package:http/http.dart' as http;
 
-import 'package:dio/dio.dart';
-import 'package:flexnews/src/core/utils/http.dart';
-import 'package:flexnews/src/core/utils/loading.dart';
-import 'package:flexnews/src/models/everything_model/markets_model.dart';
-import 'package:get/get.dart';
 
-class MarketstatusController extends GetxController {
-  Future<List<Markets>>? markets;
-  final String apiKey = 'MWK9T2B3NJSFY38R';
+Future<AllNewsResponse> fetchAllNews() async {
+  final response = await http.get(Uri.parse('https://newsapi.org/v2/everything?q=ethereum&apiKey=53ea041b1e1c4c659b41767532da63f2'));
 
-  Future<List<Markets>> getMarketStatus() async {
-    try {
-      final response =
-          await HttpUtil().get("?function=MARKET_STATUS&apikey=$apiKey");
-      final json = jsonDecode(response.body) as List<dynamic>;
-      return json.map((e) => Markets.fromJson(e)).toList();
-    } on DioException catch (e) {
-      Loading.showError(e.message!);
-      return [];
-    }
+  if (response.statusCode == 200) {
+    return AllNewsResponse.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load news');
   }
 }

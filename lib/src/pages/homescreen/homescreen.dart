@@ -1,69 +1,57 @@
-import 'dart:convert';
-
-import 'package:flexnews/src/models/everything_model/corestock_model.dart';
+import 'package:flexnews/src/controllers/market_status_controller.dart';
+import 'package:flexnews/src/models/everything_model/all_news.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<MetaDataModel>? _metaData;
+  late Future<AllNewsResponse> futureAllNews;
+
   @override
   void initState() {
     super.initState();
-    _metaData = fetchDailyData();
+    futureAllNews = fetchAllNews();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: FutureBuilder<MetaDataModel>(
-      future: _metaData,
-      builder: (context, snapshot) {
-        final data = snapshot.data;
-        if (snapshot.hasData) {
-          return CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                centerTitle: false,
-                automaticallyImplyLeading: false,
-                title: Row(
-                  children: [
-                    Text(
-                      data?.information ?? "",
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                    )
-                  ],
-                ),
-              )
-            ],
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text(snapshot.error.toString()),
-          );
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    )));
-  }
-
-  Future<MetaDataModel> fetchDailyData() async {
-    final response = await http.get(Uri.parse(
-        'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=UURWNRCCQHNP5KA4'));
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return MetaDataModel.fromJson(json);
-    } else {
-      throw Exception('Failed to fetch data');
-    }
+      appBar: AppBar(
+        title: const Text('Ethereum News'),
+      ),
+      body: Center(
+        child: FutureBuilder<AllNewsResponse>(
+          future: futureAllNews,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            } else if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data?.allArticals?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final article = snapshot.data!.allArticals![index];
+                  return ListTile(
+                    title: Text(article.title ?? 'No title'),
+                    subtitle: Text(article.description ?? 'No description'),
+                    onTap: () {
+                      // Handle tap, perhaps open the URL in a browser
+                    },
+                  );
+                },
+              );
+            } else {
+              return const Text('No data available');
+            }
+          },
+        ),
+      ),
+    );
   }
 }
