@@ -1,8 +1,11 @@
 import 'package:flexnews/src/controllers/market_status_controller.dart';
 import 'package:flexnews/src/models/everything_model/all_news.dart';
 import 'package:flexnews/src/pages/news_details.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -55,6 +58,14 @@ class _NewsPageState extends State<NewsPage> {
       selectedCoin = coin;
       futureAllNews = fetchAllNews(selectedCoin);
     });
+  }
+
+  Future<void> _launchURL(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      Get.snackbar('Error', 'could not launch news');
+    }
   }
 
   @override
@@ -173,7 +184,7 @@ class _NewsPageState extends State<NewsPage> {
                                                   image: DecorationImage(
                                                       image: NetworkImage(
                                                           article.imageUrl ??
-                                                              ''),
+                                                              'https://images.wallpapersden.com/image/wxl-bitcoin-cryptocurrency-coin_76063.jpg'),
                                                       fit: BoxFit.cover)),
                                             ),
                                             const SizedBox(
@@ -181,11 +192,12 @@ class _NewsPageState extends State<NewsPage> {
                                             ),
                                             Expanded(
                                                 child: Text(
-                                              article.title ?? "No title",
-                                              style: const TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold),
-                                            ))
+                                                  article.title ?? "No title",
+                                                  style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ))
                                           ],
                                         ),
                                         const SizedBox(
@@ -209,7 +221,7 @@ class _NewsPageState extends State<NewsPage> {
                                                   height: 2,
                                                 ),
                                                 Text(
-                                                  article.author ?? "",
+                                                  article.author ?? "Unknown",
                                                   style: const TextStyle(
                                                     color: Colors.blue,
                                                     fontWeight: FontWeight.w500,

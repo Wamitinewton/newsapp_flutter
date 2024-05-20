@@ -1,5 +1,5 @@
 import 'package:flexnews/src/bindings/binding.dart';
-import 'package:flexnews/src/pages/news_page.dart';
+import 'package:flexnews/src/pages/application.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
      builder: EasyLoading.init(),
-      home:const NewsPage()
+      home:const ApplicationPage()
     );
   }
 }

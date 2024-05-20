@@ -12,3 +12,5 @@ Future<AllNewsResponse> fetchAllNews(String query) async {
     throw Exception('Failed to load news');
   }
 }
+
+
